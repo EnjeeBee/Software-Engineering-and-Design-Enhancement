@@ -1,0 +1,19 @@
+version: '3'
+services:
+  auth-service:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/authdb
+      - JWT_SECRET=supersecretkey
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-auth:/data/db
+volumes:
+  mongo-auth:

@@ -1,0 +1,58 @@
+# This Swagger YAML file defines the Appointment Service API
+# It includes GET and POST endpoints, schemas, and JWT security settings
+
+openapi: 3.0.0
+info:
+  title: Appointment Service API
+  version: 1.0.0
+  description: API for managing appointments
+servers:
+  - url: http://localhost:5001
+paths:
+  /api/appointments:
+    get:
+      summary: Get all appointments
+      responses:
+        '200':
+          description: A list of appointments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Appointment'
+    post:
+      summary: Create a new appointment
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Appointment'
+      responses:
+        '201':
+          description: Appointment created
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Appointment:
+      type: object
+      properties:
+        date:
+          type: string
+          example: "2025-06-01"
+        time:
+          type: string
+          example: "10:00"
+        description:
+          type: string
+          example: "Dental check-up"
+        confirmed:
+          type: boolean
+          example: false

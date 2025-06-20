@@ -1,0 +1,39 @@
+version: '3'
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/authdb
+      - JWT_SECRET=supersecretkey
+    depends_on:
+      - mongo
+
+  appointment-service:
+    build: ./appointment-service
+    ports:
+      - "5001:5001"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/appointmentsdb
+      - JWT_SECRET=supersecretkey
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - appointment-service
+
+volumes:
+  mongo-data:
